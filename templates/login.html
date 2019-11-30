@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Login To Store{% endblock %}
+
+{% block content %}
+
+<div id="content">
+
+<br><br>
+
+<h1>Welcome To Anuan Ituan</h1>
+<h2>Login Below</h2><br>
+
+<form action="?" method="POST" onsubmit="login();return false;">
+	Username: <input type="text" id="uname" value=""/>
+  Password: <input type="password" id="passw" value=""/>
+	<input class="button" type="submit" value="Login" />
+</form>
+
+<br><br>
+
+<p id="stat"></p>
+
+</div>
+
+<script>
+function login(){
+    var uname = document.getElementById("uname").value;
+    var passw = document.getElementById("passw").value;
+
+    var dat = {'username':uname, 'password':passw};
+
+    $.ajax('/api/login/',{
+        method: 'POST',
+        data: JSON.stringify(dat),
+        dataType: "json",
+        contentType: "application/json",
+    }).done(function(res){
+
+      if (res['status'] == 'success'){
+        $("#stat").html('<b>Successful Login<b>');
+      }
+      else{
+        $("#stat").html('<b>Login Failed</b>');
+      }
+
+    }).fail(function(err){
+        $("#stat").html(err);
+    });
+}
+</script>
+{% endblock %}
