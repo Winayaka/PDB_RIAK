@@ -7,10 +7,6 @@
 <div id="content">
     <div class="container-fluid">
         <br><br>
-
-<<<<<<< HEAD
-<br><br>
-
 <h1>Welcome To Anuan Ituan</h1>
 <h2 >Username: </h2>
 <h2 id="user"></h2><br>
@@ -18,25 +14,13 @@
 <h3 id="last_login"></h3>
 <h3 >Last Order: </h3>
 <h3 id="last_order"></h3>
-
+<br>
 <h3> Falsh Sale </h3>
 <p id="sales"></p>
-
-<br><br>
 <form action="?" method="POST" onsubmit="sales();return false;">
   quantity: <input type="number" id="quantity" value=""/>
 	<input class="button" type="submit" value="buy" />
 </form>
-=======
-        <h1>Welcome To Anuan Ituan</h1>
-        <h2>Username: </h2>
-        <h2 id="user"></h2><br>
-        <h3>Last Login: </h3>
-        <h3 id="last_login"></h3>
-
-        <h3> Flash Sale </h3>
-        <p id="sales"></p>
->>>>>>> 11d20a0ac12ce5a670919a82eb7b2c09c82af787
 
         <br><br>
     </div>
@@ -92,6 +76,7 @@ function sales(){
 
       if (res['status'] == 'success') {
         alert("success")
+        location.reload()
       }
       else {
           alert('failed')

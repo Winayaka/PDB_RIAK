@@ -3,7 +3,7 @@ from datetime import datetime
 import json
 import riak
 
-client = riak.RiakClient(protocol='http', http_port=8098)
+client = riak.RiakClient(protocol='pbc', http_port=8098)
 client = riak.RiakClient(nodes=[
     {'host': '172.20.0.2', 'http_port': 8098},
     {'host': '172.20.0.3', 'http_port': 8098},
@@ -11,7 +11,7 @@ client = riak.RiakClient(nodes=[
     {'host': '172.20.0.5', 'http_port': 8098},
     {'host': '172.20.0.6', 'http_port': 8098}
 ])
-client = riak.RiakClient(protocol='http', nodes=[riak.RiakNode()])
+client = riak.RiakClient(protocol='pbc', nodes=[riak.RiakNode()])
 
 user_bucket = client.bucket('user')
 session_bucket = client.bucket('session')
@@ -67,7 +67,7 @@ def loginAPI():
     return jsonify(result)
 
 
-@app.route('/register', methods=['POST'])
+@app.route('/register')
 def register():
     return render_template('register.html')
 
@@ -105,7 +105,8 @@ def saleAPI():
             }, indent=4, sort_keys=True, default=str)
         order = order_bucket.new(request.json['username'], data=data)
         order.store()
-        user.data['order'] = []
+        if user.data['order'] == "":
+            user.data['order'] = []
         user.data['order'].append(order_bucket.get(
             request.json['username']).data)
         user.store()
@@ -115,7 +116,7 @@ def saleAPI():
         session_json['last_order'] = datetime.now()
         session_json = json.dumps(session_json, indent=4,
                                   sort_keys=True, default=str)
-        print(session_json)
+
         session_riak.data = session_json
         session_riak.store()
 
