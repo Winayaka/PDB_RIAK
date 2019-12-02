@@ -91,20 +91,51 @@ def sale():
         return jsonify(item_bucket.get('kipas_angin').data)
 
 # get untuk ambil barang, post untuk borong barang
-@app.route('/api/sale', methods=['GET', 'POST'])
+@app.route('/api/sale', methods=['POST'])
 def saleAPI():
-    if request.method == 'GET':
-        print(item_bucket.data)
-        return jsonify(item_bucket.data)
-    elif request.meth == 'POST':
+    if request.method == 'POST':
         user = user_bucket.get(request.json['username'])
-        user.data['order'].push(request.json['order'])
+        item = item_bucket.get(request.json['item'])
+        data = json.dumps(
+            {
+                'item': request.json['item'],
+                'quantity': request.json['quantity'],
+                'user': request.json['username'],
+                'date': datetime.now()
+            }, indent=4, sort_keys=True, default=str)
+        order = order_bucket.new(request.json['username'], data=data)
+        order.store()
+        user.data['order'] = []
+        user.data['order'].append(order_bucket.get(
+            request.json['username']).data)
+        user.store()
+        session_riak = session_bucket.get(
+            request.json['username'])
+        session_json = json.loads(session_riak.data)
+        session_json['last_order'] = datetime.now()
+        session_json = json.dumps(session_json, indent=4,
+                                  sort_keys=True, default=str)
+        print(session_json)
+        session_riak.data = session_json
+        session_riak.store()
+
+        item = item_bucket.get(request.json['item'])
+
+        result = ''
+        if(int(item.data["quantity"]) - int(request.json['quantity']) > 0):
+            item.data['quantity'] = int(
+                item.data["quantity"]) - int(request.json['quantity'])
+            item.store()
+            result = {'status': 'success'}
+        else:
+            result = {'status': 'failed'}
+        return jsonify(result)
 
 
 @app.route('/api/user/<username>', methods=['POST'])
 def userAPI(username):
     if request.method == 'GET':
-        return jsonify(user_bucket.get(request.json['username']))
+        return jsonify(user_bucket.get(request.json['username']).data)
 
 
 @app.route('/api/session/<username>', methods=['GET'])

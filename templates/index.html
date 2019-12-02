@@ -13,12 +13,17 @@
 <h2 id="user"></h2><br>
 <h3 >Last Login: </h3>
 <h3 id="last_login"></h3>
+<h3 >Last Order: </h3>
+<h3 id="last_order"></h3>
 
 <h3> Falsh Sale </h3>
 <p id="sales"></p>
 
 <br><br>
-
+<form action="?" method="POST" onsubmit="sales();return false;">
+  quantity: <input type="number" id="quantity" value=""/>
+	<input class="button" type="submit" value="buy" />
+</form>
 
 </div>
 
@@ -33,20 +38,52 @@ window.onload = function index(){
   
         $("#user").html(obj['username']);
         $("#last_login").html('<b>'+obj['last_login']+'<b>');
+        $("#last_order").html('<b>'+obj['last_order']+'<b>');
       
     }).fail(function(err){
         $("#stat").html(err);
     });
-}
 
-window.onload = function sals(){
     $.ajax('/sale',{
         method: 'GET'
     }).done(function(res){
         console.log(res)
-        $("#sales").html(res['item_name']);
+        $("#sales").html('Item Name: '+res['item_name']+
+        '<br>'+'brand: '+res['brand'] + 
+        '<br> Price: '+ res['price']+
+        '<br> Quantity: '+ res['quantity']
+        );
     }).fail(function(err){
         $("#stat").html(err);
+    });
+
+}
+
+function sales(){
+    var number = document.getElementById("quantity").value;
+
+    var dat = { 
+                'username': localStorage.getItem('username'), 
+                'quantity': number,
+                'item' : 'kipas_angin'
+                };
+    $.ajax('/api/sale', {
+        
+      method: 'POST',
+      data: JSON.stringify(dat),
+      dataType: "json",
+      contentType: "application/json",
+    }).done(function (res) {
+
+      if (res['status'] == 'success') {
+        alert("success")
+      }
+      else {
+          alert('failed')
+      }
+
+    }).fail(function (err) {
+      $("#stat").html(err);
     });
 }
 </script>
