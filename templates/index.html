@@ -5,49 +5,48 @@
 {% block content %}
 
 <div id="content">
+    <div class="container-fluid">
+        <br><br>
 
-<br><br>
+        <h1>Welcome To Anuan Ituan</h1>
+        <h2>Username: </h2>
+        <h2 id="user"></h2><br>
+        <h3>Last Login: </h3>
+        <h3 id="last_login"></h3>
 
-<h1>Welcome To Anuan Ituan</h1>
-<h2 >Username: </h2>
-<h2 id="user"></h2><br>
-<h3 >Last Login: </h3>
-<h3 id="last_login"></h3>
+        <h3> Flash Sale </h3>
+        <p id="sales"></p>
 
-<h3> Falsh Sale </h3>
-<p id="sales"></p>
-
-<br><br>
-
-
+        <br><br>
+    </div>
 </div>
 
 <script>
-window.onload = function index(){
-    $.ajax('/api/session/'+localStorage.getItem('username'),{
-        method: 'GET'
-    }).done(function(res){
-        var obj = JSON.parse(res)
-        console.table(obj)
-        console.log(obj['username'])
-  
-        $("#user").html(obj['username']);
-        $("#last_login").html('<b>'+obj['last_login']+'<b>');
-      
-    }).fail(function(err){
-        $("#stat").html(err);
-    });
-}
+    window.onload = function index() {
+        $.ajax('/api/session/' + localStorage.getItem('username'), {
+            method: 'GET'
+        }).done(function (res) {
+            var obj = JSON.parse(res)
+            console.table(obj)
+            console.log(obj['username'])
 
-window.onload = function sals(){
-    $.ajax('/sale',{
-        method: 'GET'
-    }).done(function(res){
-        console.log(res)
-        $("#sales").html(res['item_name']);
-    }).fail(function(err){
-        $("#stat").html(err);
-    });
-}
+            $("#user").html(obj['username']);
+            $("#last_login").html('<b>' + obj['last_login'] + '<b>');
+
+        }).fail(function (err) {
+            $("#stat").html(err);
+        });
+    }
+
+    window.onload = function sals() {
+        $.ajax('/sale', {
+            method: 'GET'
+        }).done(function (res) {
+            console.log(res)
+            $("#sales").html(res['item_name']);
+        }).fail(function (err) {
+            $("#stat").html(err);
+        });
+    }
 </script>
 {% endblock %}
