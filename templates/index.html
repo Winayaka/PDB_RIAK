@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Login To Store{% endblock %}
+
+{% block content %}
+
+<div id="content">
+
+<br><br>
+
+<h1>Welcome To Anuan Ituan</h1>
+<h2 >Username: </h2>
+<h2 id="user"></h2><br>
+<h3 >Last Login: </h3>
+<h3 id="last_login"></h3>
+
+
+<br><br>
+
+
+</div>
+
+<script>
+window.onload = function index(){
+    $.ajax('/api/session/'+localStorage.getItem('username'),{
+        method: 'GET'
+    }).done(function(res){
+        var obj = JSON.parse(res)
+        console.table(obj)
+        console.log(obj['username'])
+  
+        $("#user").html(obj['username']);
+        $("#last_login").html('<b>'+obj['last_login']+'<b>');
+      
+    }).fail(function(err){
+        $("#stat").html(err);
+    });
+}
+</script>
+{% endblock %}
