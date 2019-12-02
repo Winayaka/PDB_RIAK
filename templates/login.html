@@ -6,47 +6,84 @@
 
 <div id="content">
 
-<br><br>
+  <div style="container-fluid">
+    <div class="row justify-content-center  align-items-center" style="margin-top:30px;margin-bottom:100px;">
+      <!-- Material form login -->
+      <div class="col-md-6">
+        <!-- Card -->
+        <div class="card">
 
-<h1>Welcome To Anuan Ituan</h1>
-<h2>Login Below</h2><br>
+          <!-- Card body -->
+          <div class="card-body">
 
-<form action="?" method="POST" onsubmit="login();return false;">
-	Username: <input type="text" id="uname" value=""/>
-  Password: <input type="password" id="passw" value=""/>
-	<input class="button" type="submit" value="Login" />
-</form>
+            <form action="?" method="POST" onsubmit="login();return false;">
+              <h4 class="h4 text-center py-4 card-title primary-color" style="color: white">Login</h4>
 
-<br><br>
+              <!-- Material input text -->
+              <div class="md-form">
+                <i class="fa fa-user prefix grey-text"></i>
+                <input type="text" id="uname" name="uname" class="form-control">
+                <label for="uname" class="font-weight-light">Username</label>
+              </div>
 
-<p id="stat"></p>
+              <!-- Material input password -->
+              <div class="md-form">
+                <i class="fa fa-lock prefix grey-text"></i>
+                <input type="password" id="passw" name="passw" class="form-control">
+                <label for="passw" class="font-weight-light">Password</label>
+              </div>
+
+              <div class="text-right py-4 mt-3">
+                <button class="btn btn-success" type="submit">Login</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <br><br>
+
+  <h1>Welcome To Anuan Ituan</h1>
+  <h2>Login Below</h2><br>
+
+  <form action="?" method="POST" onsubmit="login();return false;">
+    Username: <input type="text" id="uname" value="" />
+    Password: <input type="password" id="passw" value="" />
+    <input class="button" type="submit" value="Login" />
+  </form>
+
+  <br><br>
+
+  <p id="stat"></p> -->
 
 </div>
 
 <script>
-function login(){
+  function login() {
     var uname = document.getElementById("uname").value;
     var passw = document.getElementById("passw").value;
 
-    var dat = {'username':uname, 'password':passw};
+    var dat = { 'username': uname, 'password': passw };
 
-    $.ajax('/api/login/',{
-        method: 'POST',
-        data: JSON.stringify(dat),
-        dataType: "json",
-        contentType: "application/json",
-    }).done(function(res){
+    $.ajax('/api/login/', {
+      method: 'POST',
+      data: JSON.stringify(dat),
+      dataType: "json",
+      contentType: "application/json",
+    }).done(function (res) {
 
-      if (res['status'] == 'success'){
+      if (res['status'] == 'success') {
         $("#stat").html('<b>Successful Login<b>');
       }
-      else{
+      else {
         $("#stat").html('<b>Login Failed</b>');
       }
 
-    }).fail(function(err){
-        $("#stat").html(err);
+    }).fail(function (err) {
+      $("#stat").html(err);
     });
-}
+  }
 </script>
 {% endblock %}
