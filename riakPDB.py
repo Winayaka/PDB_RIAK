@@ -3,12 +3,12 @@ import riak
 
 client = riak.RiakClient(protocol='http', host='172.19.0.2', http_port=8098)
 client = riak.RiakClient(nodes=[
-    {'host':'172.19.0.2','http_port':8098},
-    {'host':'172.19.0.3','http_port':8098},
-    {'host':'172.19.0.4','http_port':8098},
-    {'host':'172.19.0.5','http_port':8098},
-    {'host':'172.19.0.6','http_port':8098}
-    ])
+    {'host': '172.19.0.2', 'http_port': 8098},
+    {'host': '172.19.0.3', 'http_port': 8098},
+    {'host': '172.19.0.4', 'http_port': 8098},
+    {'host': '172.19.0.5', 'http_port': 8098},
+    {'host': '172.19.0.6', 'http_port': 8098}
+])
 client = riak.RiakClient(protocol='http', nodes=[riak.RiakNode()])
 
 # Choose the bucket to store data in.
@@ -49,6 +49,6 @@ new_profil = user_bucket.new('johndoe', data={
 profil = profile_bucket.get('a')
 
 
-a = str(johndoe.data)
+a = str(user_bucket.data)
 print(a)
 print(profil.data)

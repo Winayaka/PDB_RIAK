@@ -75,7 +75,9 @@
     }).done(function (res) {
 
       if (res['status'] == 'success') {
+        localStorage.setItem("username", uname);
         $("#stat").html('<b>Successful Login<b>');
+        window.location.href = '/home'
       }
       else {
         $("#stat").html('<b>Login Failed</b>');
