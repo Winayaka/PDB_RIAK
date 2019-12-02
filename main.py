@@ -16,6 +16,7 @@ client = riak.RiakClient(protocol='http', nodes=[riak.RiakNode()])
 user_bucket = client.bucket('user')
 session_bucket = client.bucket('session')
 item_bucket = client.bucket('item')
+order_bucket = client.bucket('oreder')
 
 app = Flask(__name__)
 
@@ -86,7 +87,8 @@ def registerAPI():
 
 @app.route('/sale')
 def sale():
-    return render_template('sale.html')
+    if request.method == 'GET':
+        return jsonify(item_bucket.get('kipas_angin').data)
 
 # get untuk ambil barang, post untuk borong barang
 @app.route('/api/sale', methods=['GET', 'POST'])
@@ -99,8 +101,8 @@ def saleAPI():
         user.data['order'].push(request.json['order'])
 
 
-@app.route('/api/user', methods=['GET'])
-def userAPI():
+@app.route('/api/user/<username>', methods=['POST'])
+def userAPI(username):
     if request.method == 'GET':
         return jsonify(user_bucket.get(request.json['username']))
 
@@ -111,7 +113,20 @@ def sessionAPI(username):
         return jsonify(session_bucket.get(username).data)
 
 
+# @api.route('/api/item', methods=['GET'])
+# def itemAPI():
+#     if request.method == 'GET':
+#         return jsonify(item_bucket.get('kipas_angin').data)
+
+
 if __name__ == "__main__":
     app.secret_key = 'super secret key'
     # runs on machine ip address to make it visible on netowrk
+    item = item_bucket.new('kipas_angin', data={
+        'item_name': 'Kipas Angin',
+        'brand': 'Cosmos Wadesdes',
+        'quantity': 15000,
+        'price': '$80'
+    })
+    item.store()
     app.run(host='127.1.0.0', port='7001')

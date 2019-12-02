@@ -14,6 +14,8 @@
 <h3 >Last Login: </h3>
 <h3 id="last_login"></h3>
 
+<h3> Falsh Sale </h3>
+<p id="sales"></p>
 
 <br><br>
 
@@ -32,6 +34,17 @@ window.onload = function index(){
         $("#user").html(obj['username']);
         $("#last_login").html('<b>'+obj['last_login']+'<b>');
       
+    }).fail(function(err){
+        $("#stat").html(err);
+    });
+}
+
+window.onload = function sals(){
+    $.ajax('/sale',{
+        method: 'GET'
+    }).done(function(res){
+        console.log(res)
+        $("#sales").html(res['item_name']);
     }).fail(function(err){
         $("#stat").html(err);
     });
